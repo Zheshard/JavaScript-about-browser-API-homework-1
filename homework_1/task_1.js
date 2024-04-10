@@ -49,14 +49,15 @@ function renderSchedule() {
     schedule.innerHTML = '';
     sportsActivities.forEach(event => {
         const sportsActivity = document.createElement('li');
+        sportsActivity.classList.add('list-group-item');
         sportsActivity.innerHTML = `
             <h3>${event.title}</h3>
             <p class="time">Время проведения: ${event.time}</p>
             <p class="currentNum">Записано: ${event.currentNumOfAthletes} участников</p>
             <p class="maxNum">Максимальное число участников: ${event.maxNumOfAthletes}</p>
-            <button onclick="register(${event.id})" ${event.currentNumOfAthletes >= event.maxNumOfAthletes
+            <button class="btn btn-success" onclick="register(${event.id})" ${event.currentNumOfAthletes >= event.maxNumOfAthletes
                 ? 'disabled' : ''}>Записаться</button>
-            <button onclick="cancelRegistration(${event.id})">Отменить запись</button>
+            <button class="btn btn-secondary" onclick="cancelRegistration(${event.id})">Отменить запись</button>
         `;
         schedule.appendChild(sportsActivity);
     });
