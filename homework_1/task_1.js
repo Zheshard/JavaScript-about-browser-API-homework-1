@@ -26,3 +26,60 @@
 // 6. Все изменения (запись, отмена записи) должны сохраняться и отображаться в реальном времени на странице.
 
 // 7. При разработке используйте Bootstrap для стилизации элементов.
+
+const initialJSON = '[{"id":1,"title":"Фитнес","time":"14:00","maxNumOfAthletes":10,"currentNumOfAthletes":9},{"id":2,"title":"Пилатес","time":"16:00","maxNumOfAthletes":7,"currentNumOfAthletes":5},{"id":3,"title":"Кроссфит","time":"18:00","maxNumOfAthletes":10,"currentNumOfAthletes":7}]';
+
+let sportsActivities = JSON.parse(initialJSON);
+const schedule = document.querySelector('.schedule');
+
+function saveToLocalStorage() {
+    localStorage.setItem('sportsActivities', JSON.stringify(sportsActivities));
+}
+
+function loadFromLocalStorage() {
+    const storedData = localStorage.getItem('sportsActivities');
+    if (storedData) {
+        sportsActivities = JSON.parse(storedData);
+    }
+}
+
+loadFromLocalStorage();
+
+function renderSchedule() {
+    schedule.innerHTML = '';
+    sportsActivities.forEach(event => {
+        const sportsActivity = document.createElement('li');
+        sportsActivity.innerHTML = `
+            <h3>${event.title}</h3>
+            <p class="time">Время проведения: ${event.time}</p>
+            <p class="currentNum">Записано: ${event.currentNumOfAthletes} участников</p>
+            <p class="maxNum">Максимальное число участников: ${event.maxNumOfAthletes}</p>
+            <button onclick="register(${event.id})" ${event.currentNumOfAthletes >= event.maxNumOfAthletes
+                ? 'disabled' : ''}>Записаться</button>
+            <button onclick="cancelRegistration(${event.id})">Отменить запись</button>
+        `;
+        schedule.appendChild(sportsActivity);
+    });
+}
+
+function register(eventId) {
+    const event = sportsActivities.find(event => event.id === eventId);
+
+    if (event.currentNumOfAthletes < event.maxNumOfAthletes) {
+        event.currentNumOfAthletes++;
+        saveToLocalStorage();
+        renderSchedule();
+    }
+}
+
+function cancelRegistration(eventId) {
+    const event = sportsActivities.find(event => event.id === eventId);
+
+    if (event.currentNumOfAthletes > 0) {
+        event.currentNumOfAthletes--;
+        saveToLocalStorage();
+        renderSchedule();
+    }
+}
+
+renderSchedule();
