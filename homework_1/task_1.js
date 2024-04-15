@@ -63,6 +63,7 @@ function renderSchedule() {
     });
 }
 
+
 function register(eventId) {
     const event = sportsActivities.find(event => event.id === eventId);
 
